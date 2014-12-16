@@ -1,0 +1,33 @@
+{
+  "uuid": "2b50ff13-23f2-40d1-9ddf-2dd06ad07ba2",
+  "shortName": "Vitals",
+  "longName": "Vitals",
+  "companyName": "Bengalbot",
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+  },
+  "resources": {
+    "media": [
+        {
+            "menuIcon": true,
+            "type": "png",
+            "name": "IMAGE_MENU_ICON",
+            "file": "images/caduceus_icon.png"
+        },
+        {
+            "type": "png",
+            "name": "WATCHFACE_BACKGROUND",
+            "file": "images/watch-background.png"
+        },
+        {
+            "type": "png",
+            "name": "HEART",
+            "file": "images/heart.png"
+        }
+    ]
+  }
+}
