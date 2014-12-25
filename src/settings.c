@@ -96,11 +96,14 @@ void settings_menu_select(int index, void *context) {
     VitalsMenuId id = index;
     switch (id) {
         case VitalsMenuTimeout:
-            if (s->timeout == 30) {
+            if (s->timeout == 15) {
+                set_timeout(30);
+            }
+            else if (s->timeout == 30) {
                 set_timeout(60);
             }
             else {
-                set_timeout(30);
+                set_timeout(15);
             }
             break;
         
