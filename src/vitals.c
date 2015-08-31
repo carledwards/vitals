@@ -205,6 +205,7 @@ void hands_update_proc(Layer *layer, GContext *ctx) {
         }
         // draw the dot in the middle
         graphics_context_set_fill_color(ctx, GColorWhite);
+        graphics_fill_circle(ctx, center, 4);
         graphics_context_set_stroke_color(ctx, GColorBlack);
         graphics_draw_circle(ctx, center, 4);
     }
@@ -379,7 +380,11 @@ void app_init(void) {
     app_set_state(VitalsStateWatch);
 
     app.window = window_create();
+
+#ifdef PBL_SDK_2
     window_set_fullscreen(app.window, true);
+#endif
+
     window_set_window_handlers(app.window, (WindowHandlers) {
         .load = window_load,
          .unload = window_unload,
@@ -392,7 +397,11 @@ void app_init(void) {
     Layer *window_layer = window_get_root_layer(app.window);
     GRect bounds = layer_get_bounds(window_layer);
     GPoint center = grect_center_point(&bounds);
+    
+#ifdef PBL_SDK_2
     center.y = center.y+8;
+#endif
+
     gpath_move_to(app.minute_arrow, center);
     gpath_move_to(app.hour_arrow, center);
 

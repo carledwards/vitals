@@ -164,7 +164,11 @@ void settings_init() {
     load_settings_from_storage();
     
     app.settings_window = window_create();
+
+#ifdef PBL_SDK_2
     window_set_fullscreen(app.settings_window, true);
+#endif
+
     window_set_background_color(app.settings_window, GColorWhite);
     window_set_window_handlers(app.settings_window, (WindowHandlers){
         .load = settings_window_load,

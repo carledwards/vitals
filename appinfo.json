@@ -8,26 +8,30 @@
   "watchapp": {
     "watchface": false
   },
-  "appKeys": {
-  },
+  "appKeys": {},
   "resources": {
     "media": [
-        {
-            "menuIcon": true,
-            "type": "png",
-            "name": "IMAGE_MENU_ICON",
-            "file": "images/caduceus_icon.png"
-        },
-        {
-            "type": "png",
-            "name": "WATCHFACE_BACKGROUND",
-            "file": "images/watch-background.png"
-        },
-        {
-            "type": "png",
-            "name": "HEART",
-            "file": "images/heart.png"
-        }
+      {
+        "menuIcon": true,
+        "type": "png",
+        "name": "IMAGE_MENU_ICON",
+        "file": "images/caduceus_icon.png"
+      },
+      {
+        "type": "png",
+        "name": "WATCHFACE_BACKGROUND",
+        "file": "images/watch-background.png"
+      },
+      {
+        "type": "png",
+        "name": "HEART",
+        "file": "images/heart.png"
+      }
     ]
-  }
+  },
+  "targetPlatforms": [
+    "aplite",
+    "basalt"
+  ],
+  "sdkVersion": "3"
 }
