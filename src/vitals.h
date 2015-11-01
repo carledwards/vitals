@@ -40,6 +40,7 @@ typedef struct {
     int timeout;
     int delay;
     bool vibrate;
+    bool seconds_hand;
 } VitalsSettings;
 
 typedef struct {
