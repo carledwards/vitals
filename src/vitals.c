@@ -170,10 +170,12 @@ void hands_update_proc(Layer *layer, GContext *ctx) {
     int32_t second_angle = TRIG_MAX_ANGLE * (app.state == VitalsStateCountPulses ? app.timer_seconds++ : t->tm_sec) / 60;
 
     // second hand
-    secondHand.y = (int16_t)(-cos_lookup(second_angle) * (int32_t)(secondHandLength-2) / TRIG_MAX_RATIO) + center.y;
-    secondHand.x = (int16_t)(sin_lookup(second_angle) * (int32_t)(secondHandLength-2) / TRIG_MAX_RATIO) + center.x;
-    graphics_context_set_stroke_color(ctx, GColorWhite);
-    graphics_draw_line(ctx, secondHand, center);
+    if (app.settings.seconds_hand || app.state == VitalsStateCountPulses) {
+        secondHand.y = (int16_t)(-cos_lookup(second_angle) * (int32_t)(secondHandLength-2) / TRIG_MAX_RATIO) + center.y;
+        secondHand.x = (int16_t)(sin_lookup(second_angle) * (int32_t)(secondHandLength-2) / TRIG_MAX_RATIO) + center.x;
+        graphics_context_set_stroke_color(ctx, GColorWhite);
+        graphics_draw_line(ctx, secondHand, center);
+    }
 
     if (app.state == VitalsStateWatch) {
         graphics_context_set_fill_color(ctx, GColorWhite);
@@ -211,8 +213,15 @@ void hands_update_proc(Layer *layer, GContext *ctx) {
     }
 }
 
-void handle_second_tick(struct tm *tick_time, TimeUnits units_changed) {
+void handle_timer_tick(struct tm *tick_time, TimeUnits units_changed) {
     layer_mark_dirty(app.hands_layer);
+}
+
+void subscribe_tick_timer() {
+    tick_timer_service_unsubscribe();
+    tick_timer_service_subscribe(
+        app.settings.seconds_hand || app.state == VitalsStateCountPulses ? SECOND_UNIT : MINUTE_UNIT, 
+        handle_timer_tick);
 }
 
 void timeout_timer_callback(void *data) {
@@ -274,6 +283,8 @@ void app_set_state(VitalsState new_state) {
         light_enable(false);
     }
 
+    subscribe_tick_timer();
+    
     switch(app.state) {
     case VitalsStateWatch:
         layer_set_hidden(bitmap_layer_get_layer(app.heart_image_layer), true);
@@ -409,7 +420,7 @@ void app_init(void) {
     const bool animated = true;
     window_stack_push(app.window, animated);
 
-    tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
+    subscribe_tick_timer();
 }
 
 void app_deinit(void) {

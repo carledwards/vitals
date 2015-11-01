@@ -26,15 +26,18 @@
 #define TIMEOUT_SETTINGS_KEY 1
 #define DELAY_SETTINGS_KEY 2
 #define VIBRATE_SETTINGS_KEY 3
+#define SECONDS_HAND_SETTINGS_KEY 4
 
 #define TIMEOUT_DEFAULT 30
 #define DELAY_DEFAULT 5
 #define VIBRATE_DEFAULT true
+#define SECONDS_HAND_DEFAULT true
 
 typedef enum {
     VitalsMenuTimeout = 0,
     VitalsMenuDelay,
     VitalsMenuVibrate,
+    VitalsMenuSecondsHand,
     VitalsMenuItemCount
 } VitalsMenuId; // Aliases for each menu item by index
 
@@ -48,6 +51,7 @@ void vitals_update_menus() {
     static char beatTimeString[30];
     static char startDelayString[30];
     static char vibrationString[30];
+    static char secondsHandString[30];
     for (VitalsMenuId id = 0; id < VitalsMenuItemCount; id++) {
         m = &settings_menu_items[id];
         switch (id) {
@@ -67,6 +71,12 @@ void vitals_update_menus() {
                 m->title = "Vibration";
                 snprintf(vibrationString, ARRAY_LENGTH(vibrationString), "%s", app.settings.vibrate ? "ON" : "OFF");
                 m->subtitle = vibrationString;
+                break;
+                
+            case VitalsMenuSecondsHand:
+                m->title = "Seconds Hand";
+                snprintf(secondsHandString, ARRAY_LENGTH(secondsHandString), "%s", app.settings.seconds_hand ? "ON" : "OFF");
+                m->subtitle = secondsHandString;
                 break;
                 
             default:
@@ -89,6 +99,11 @@ void set_delay(int delay) {
 void set_vibrate(bool vibrate) {
     app.settings.vibrate = vibrate;
     persist_write_int(VIBRATE_SETTINGS_KEY, vibrate);
+}
+
+void set_seconds_hand(bool enabled) {
+    app.settings.seconds_hand = enabled;
+    persist_write_int(SECONDS_HAND_SETTINGS_KEY, enabled);
 }
 
 void settings_menu_select(int index, void *context) {
@@ -122,6 +137,10 @@ void settings_menu_select(int index, void *context) {
         case VitalsMenuVibrate:
             set_vibrate(!s->vibrate);
             break;
+
+        case VitalsMenuSecondsHand:
+            set_seconds_hand(!s->seconds_hand);
+            break;
             
         default:
             return;
@@ -149,6 +168,13 @@ void load_settings_from_storage() {
     }
     else {
         app.settings.vibrate = persist_read_bool(VIBRATE_SETTINGS_KEY);
+    }
+
+    if (persist_exists(SECONDS_HAND_SETTINGS_KEY) == false) {
+        set_seconds_hand(SECONDS_HAND_DEFAULT);
+    }
+    else {
+        app.settings.seconds_hand = persist_read_bool(SECONDS_HAND_SETTINGS_KEY);
     }
 }
 
