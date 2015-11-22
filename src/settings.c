@@ -206,7 +206,11 @@ void settings_init() {
     }
     settings_menu_section_root.items = settings_menu_items;
     settings_menu_section_root.num_items = VitalsMenuItemCount;
+#if PBL_ROUND
+    settings_menu_section_root.title = "     SETTINGS";
+#else
     settings_menu_section_root.title = "SETTINGS";
+#endif
     settings_menu_section_all[0] = settings_menu_section_root;
     
     // setup menu layer
