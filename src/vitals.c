@@ -47,8 +47,17 @@ const GPathInfo HOUR_HAND_POINTS = {
 
 VitalsApplication app;
 
-#define SCREEN_WIDTH    144
-#define SCREEN_HEIGHT   168
+#if defined(PBL_RECT)
+#define SCREEN_WIDTH        144
+#define SCREEN_HEIGHT       168
+#define TOP_BOTTOM_MARGIN     1
+#define LEFT_RIGHT_MARGIN     0
+#elif defined(PBL_ROUND)
+#define SCREEN_WIDTH        180
+#define SCREEN_HEIGHT       180
+#define TOP_BOTTOM_MARGIN    12
+#define LEFT_RIGHT_MARGIN     5
+#endif
 
 DateLocation get_obstructed_location_from_minutes(int minutes) {
     // this is tuned for the size of the date layer (dow + day)
@@ -128,27 +137,27 @@ void layout_date_layer(struct tm *t) {
 
     switch(app.date_location) {
     case Right:
-        layer_set_frame((Layer *)app.day_label, GRect(82, SCREEN_HEIGHT/2-29, 40, 30));
+        layer_set_frame((Layer *)app.day_label, GRect(SCREEN_WIDTH-62-LEFT_RIGHT_MARGIN, SCREEN_HEIGHT/2-28, 40, 30));
         text_layer_set_text_alignment(app.day_label, GTextAlignmentCenter);
-        layer_set_frame((Layer *)app.num_label, GRect(82, SCREEN_HEIGHT/2-8, 40, 30));
+        layer_set_frame((Layer *)app.num_label, GRect(SCREEN_WIDTH-62-LEFT_RIGHT_MARGIN, SCREEN_HEIGHT/2-7, 40, 30));
         text_layer_set_text_alignment(app.num_label, GTextAlignmentCenter);
         break;
     case Bottom:
-        layer_set_frame((Layer *)app.day_label, GRect(SCREEN_WIDTH/2 - 41, 109, 40, 30));
+        layer_set_frame((Layer *)app.day_label, GRect(SCREEN_WIDTH/2 - 37, SCREEN_HEIGHT-59-TOP_BOTTOM_MARGIN, 40, 30));
         text_layer_set_text_alignment(app.day_label, GTextAlignmentRight);
-        layer_set_frame((Layer *)app.num_label, GRect(SCREEN_WIDTH/2 + 5, 109, 40, 30));
+        layer_set_frame((Layer *)app.num_label, GRect(SCREEN_WIDTH/2 + 9, SCREEN_HEIGHT-59-TOP_BOTTOM_MARGIN, 40, 30));
         text_layer_set_text_alignment(app.num_label, GTextAlignmentLeft);
         break;
     case Left:
-        layer_set_frame((Layer *)app.day_label, GRect(25, SCREEN_HEIGHT/2-29, 40, 30));
+        layer_set_frame((Layer *)app.day_label, GRect(25+LEFT_RIGHT_MARGIN, SCREEN_HEIGHT/2-28, 40, 30));
         text_layer_set_text_alignment(app.day_label, GTextAlignmentCenter);
-        layer_set_frame((Layer *)app.num_label, GRect(25, SCREEN_HEIGHT/2-8, 40, 30));
+        layer_set_frame((Layer *)app.num_label, GRect(25+LEFT_RIGHT_MARGIN, SCREEN_HEIGHT/2-7, 40, 30));
         text_layer_set_text_alignment(app.num_label, GTextAlignmentCenter);
         break;
     default:
-        layer_set_frame((Layer *)app.day_label, GRect(SCREEN_WIDTH/2 - 37, 25, 40, 30));
+        layer_set_frame((Layer *)app.day_label, GRect(SCREEN_WIDTH/2 - 37, 25+TOP_BOTTOM_MARGIN, 40, 30));
         text_layer_set_text_alignment(app.day_label, GTextAlignmentRight);
-        layer_set_frame((Layer *)app.num_label, GRect(SCREEN_WIDTH/2 + 7, 25, 40, 30));
+        layer_set_frame((Layer *)app.num_label, GRect(SCREEN_WIDTH/2 + 9, 25+TOP_BOTTOM_MARGIN, 40, 30));
         text_layer_set_text_alignment(app.num_label, GTextAlignmentLeft);
     }
 }
